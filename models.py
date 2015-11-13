@@ -17,13 +17,13 @@ class Entertainment(object):
 
 
 class CheckIn(object):
-    def __init__(self, client_id, entertainment_id, time_id, url, time, longtitude, latitude):
+    def __init__(self, client_id, entertainment_id, time_id, url, time, longitude, latitude):
         self.client_id = client_id
         self.entertainment_id = entertainment_id
         self.time_id = time_id
         self.url = url
         self.time = time
-        self.longtitude = longtitude
+        self.longtitude = longitude
         self.latitude = latitude
 
 

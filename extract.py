@@ -28,4 +28,4 @@ def extract(**kwargs):
     except KeyError:
         logging.error("Extract: cannot allocate \"instagram\" or \"data_mos_ru\"")
 
-    return data_mos_ru, instagram, None
+    return data_mos_ru, instagram, [], []
