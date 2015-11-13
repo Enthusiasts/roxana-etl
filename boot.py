@@ -10,8 +10,10 @@ __author__ = 'debalid'
 
 logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 
-(json_data_mos_ru, json_instagram) = extract(dir=os.path.join(os.getcwd(), "/raw/"))
+(json_data_mos_ru, json_instagram) = extract(data_mos_ru=os.path.join(os.getcwd(), "raw/data_mos_ru"),
+                                             instagram=os.path.join(os.getcwd(), "raw/instagram"))
 
 (entertainments, checkins, times, clients, zones) = transform(json_data_mos_ru, json_instagram)
 
 load(entertainments, checkins, times, clients, zones)
+

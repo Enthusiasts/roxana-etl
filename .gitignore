@@ -1,4 +1,5 @@
-raw/
+instagram/*
+data_mos_ru/*
 *.log
 .idea/
 __pycache__/
