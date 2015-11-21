@@ -2,7 +2,7 @@ import os
 import logging
 
 from extract import extract
-from transform import transform
+from transform import *
 from load import *
 from postgres import PostgresInjection
 import models
@@ -26,7 +26,7 @@ def main():
     pass
 
 
-def test():
+def test_load_dimensions():
     postgres_injection = PostgresInjection()
 
     ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title", 0.0, 0.0, 100, False), range(10)))
@@ -34,5 +34,20 @@ def test():
     load_dimensions(postgres_injection, ents, None, None)
 
 
-# test()
-main()
+def test_transform_facts():
+    postgres_injection = PostgresInjection()
+
+    from datetime import datetime
+    checkins = list(map(lambda x: {
+        INSTA_URL: "url",
+        INSTA_USERNAME: "username",
+        INSTA_DATETIME: "21 11 2015",
+        INSTA_GEO: "0.0 0.0"
+    }, range(10)))
+
+    transform_facts(postgres_injection, checkins)
+
+#test_load_dimensions()
+test_transform_facts()
+
+#main()

@@ -9,9 +9,9 @@ def load(postgres_injection, entertainments, checkins, clients, zones):
 
 
 def load_dimensions(postgres_injection, entertainments, clients, zones):
-    with postgres_injection.connection() as connection:
+    try:
         # Transaction in curs scope.
-        with connection.cursor() as curs:
+        with postgres_injection.connection() as connection, connection.cursor() as curs:
             # TODO: handle updates!!!
             # Load entertainments
             if entertainments:
@@ -73,7 +73,10 @@ def load_dimensions(postgres_injection, entertainments, clients, zones):
                     days_tuples
                 )
 
-            logging.info("Dimensions loaded.")
+        logging.info("Dimensions loaded.")
+
+    except Exception as e:
+        logging.error("Exception in load: " + e.args[0])
 
 
 def load_facts(postgres_injection, checkins):

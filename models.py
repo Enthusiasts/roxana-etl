@@ -19,12 +19,13 @@ class Entertainment(object):
 
 class CheckIn(object):
     # TODO: Удалить из конструктора client_id, entertainment_id, time_id
-    def __init__(self, url, datetime, longitude, latitude, username):
+    def __init__(self, url, datetime, longitude, latitude, username, username_url):
         self.url = url
         self.datetime = datetime  # Тип datetime!
         self.longtitude = longitude
         self.latitude = latitude
         self.username = username
+        self.username_url = username_url
 
         self.client_id = 0
         self.entertainment_id = 0
