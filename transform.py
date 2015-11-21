@@ -4,7 +4,62 @@ import time
 from models import *
 from data_consts import *
 
+def transform_dimensions(entertainments_datamosru, clients_instagram, zones_datamosru, polygons_nowhere):
+    #Times будет генерироваться в лоаде сразу.
 
+    entertainments = []
+    clients = []
+    zones = []
+
+    # set zones
+    try:
+        for data in zones_datamosru:
+            title = data[ZONE_TITLE]
+            timestamp = time.time()  # canonical time
+            zones.append(Zone(title, timestamp, None))
+    except Exception as e:
+        print("Exception in transforming zones data: ", e)
+
+    # set polygons to zone
+    try:
+        for data in polygons_nowhere:
+            title = data[POLYGONS_TITLE]
+            poly = data[POLYGONS_DATA]
+            injected = False
+            for zn in zones:
+                if zn.title == title:
+                    # set polygon
+                    zn.polygon = poly
+                    injected = True
+                    break
+            if not injected:
+                # update polygon if such zone exist
+                zones.append(Zone(title, None, poly))
+    except Exception as e:
+        print("Exception in transforming polygons data: ", e)
+
+    # set entertainments
+    try:
+        # verify this code after finishing developing extracting entertainments data
+        for i in len(entertainments_datamosru):
+            title = entertainments_datamosru[i][ENTERTAINMENTS_ZONE_TITLE]
+            cost = entertainments_datamosru[i][ENTERTAINMENTS_COST]
+            zone_title = entertainments_datamosru[i][ENTERTAINMENTS_ZONE_TITLE]
+            lon = entertainments_datamosru[i][ENTERTAINMENTS_LONGITUDE]
+            lat = entertainments_datamosru[i][ENTERTAINMENTS_LATITUDE]
+            seat = entertainments_datamosru[i][ENTERTAINMENTS_SEAT_COUNT]
+            social = entertainments_datamosru[i][ENTERTAINMENTS_SOCIAL_PRIVELEGES]
+            entertainments.append(Entertainment(i, title, cost, zone_title, lon, lat, seat, social))
+    except Exception as e:
+        print("Exception in transforming entertainments data: ", e)
+
+    pass
+
+def transform_facts(postgres_injection, checkins_instagram):
+    #Здесь будут маппинг к entertainments по геопозиции, к times по времени, к clients по юзернейму.
+    pass
+
+#TODO: разбить на методы сверху
 # where to find entertainments?
 def transform(postgres_injection, data_mos_ru, instagram, entertainments_data, polygons):
     entertainments = []
@@ -13,6 +68,7 @@ def transform(postgres_injection, data_mos_ru, instagram, entertainments_data, p
     clients = []
     zones = []
 
+    '''
     # set zones
     try:
         for data in data_mos_ru:
@@ -52,6 +108,7 @@ def transform(postgres_injection, data_mos_ru, instagram, entertainments_data, p
                 zones.append(Zone(title, None, poly))
     except Exception as e:
         print("Exception in transforming polygons data: ", e)
+    '''
 
     # set clients and checkins
     try:
