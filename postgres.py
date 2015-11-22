@@ -1,4 +1,4 @@
-__author__ = 'debal'
+# Enthusiasts, 2015
 
 import psycopg2
 

@@ -1,3 +1,9 @@
+# Enthusiasts, 2015
+
+# ETL processing data type
+TYPE_DIMENS = 0
+TYPE_FACTS = 1
+
 # json keys
 ZONE_TITLE = "ObjectShortName"
 POLYGONS_TITLE = "p_title"

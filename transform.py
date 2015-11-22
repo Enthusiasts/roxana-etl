@@ -156,7 +156,7 @@ def transform_facts(postgres_injection, checkins_instagram):
         traceback.print_exc()
 
 
-# TODO: разбить на методы сверху
+# TODO: удалить все. методы вызываются из boot.py
 # where to find entertainments?
 def transform(postgres_injection, data_mos_ru, instagram, entertainments_data, polygons):
     entertainments = []

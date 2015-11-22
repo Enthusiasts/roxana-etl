@@ -1,4 +1,4 @@
-__author__ = 'someone'
+# Enthusiasts, 2015
 
 '''
 Модели данных к которым приводит transform
@@ -6,7 +6,6 @@ __author__ = 'someone'
 
 
 class Entertainment(object):
-    # Вот такие штуки нелоьзя проще делать?
     def __init__(self, title, cost, zone_title, longitude, latitude, seats_count, social_priveleges):
         self.title = title
         self.cost = cost
@@ -18,7 +17,6 @@ class Entertainment(object):
 
 
 class CheckIn(object):
-    # TODO: Удалить из конструктора client_id, entertainment_id, time_id
     def __init__(self, url, datetime, longitude, latitude, username, username_url):
         self.url = url
         self.datetime = datetime  # Тип datetime!
@@ -30,15 +28,6 @@ class CheckIn(object):
         self.client_id = 0
         self.entertainment_id = 0
         self.time_id = 0
-
-
-class Time(object):
-    # TODO: удалить, он теперь бесполезен
-    def __init__(self, year, month, day, day_of_week):
-        self.year = year
-        self.month = month
-        self.day = day
-        self.day_of_week = day_of_week
 
 
 class Client(object):

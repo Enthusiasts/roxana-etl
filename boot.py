@@ -1,17 +1,12 @@
-import os
-import logging
+# Enthusiasts, 2015
 
-from extract import extract
-from transform import *
-from load import *
-from postgres import PostgresInjection
-import models
+from tests import *
 
-__author__ = 'debalid'
-
-logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
+# True - test mode, False - Work mode
+TEST = True
 
 
+# TODO: выпилить после прописывания входных параметров функции etl
 def old_main():
     '''(json_data_mos_ru, json_instagram, json_entertainments, json_polygons) = extract(data_mos_ru=os.path.join(os.getcwd(), "raw/data_mos_ru"),
                                                  instagram=os.path.join(os.getcwd(), "raw/instagram"))
@@ -22,32 +17,35 @@ def old_main():
     '''
 
 
+# TODO: прописать все необходимые входные пареметры функциям
+def etl_process(target):
+    if target == TYPE_DIMENS:
+        dimens = extract('''do here''')
+        transform_dimensions(dimens)
+        load_dimensions(dimens)
+    elif(target == TYPE_FACTS):
+        facts = extract('''do here''')
+        transform_facts(facts)
+        load_facts(facts)
+    else:
+        print("Target type is invalid")
+
+
+# tests function
+def test():
+    test_load_dimensions()
+    test_transform_facts()
+
+
+# processing function
 def main():
-    pass
+    etl_process(TYPE_DIMENS)
+    etl_process(TYPE_DIMENS)
 
+# script start
+logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 
-def test_load_dimensions():
-    postgres_injection = PostgresInjection()
-
-    ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title", 0.0, 0.0, 100, False), range(10)))
-
-    load_dimensions(postgres_injection, ents, None, None)
-
-
-def test_transform_facts():
-    postgres_injection = PostgresInjection()
-
-    from datetime import datetime
-    checkins = list(map(lambda x: {
-        INSTA_URL: "url",
-        INSTA_USERNAME: "username",
-        INSTA_DATETIME: "21 11 2015",
-        INSTA_GEO: "0.0 0.0"
-    }, range(10)))
-
-    transform_facts(postgres_injection, checkins)
-
-#test_load_dimensions()
-test_transform_facts()
-
-#main()
+if TEST:
+    test()
+else:
+    main()
