@@ -9,6 +9,7 @@ def load_dimensions(postgres_injection, dimens):
     entertainments = dimens[0]
     clients = dimens[1]
     zones = dimens[2]
+    times = dimens[3]
 
     try:
         # Transaction in curs scope.
@@ -40,20 +41,8 @@ def load_dimensions(postgres_injection, dimens):
                 ))
                 curs.executemany("INSERT INTO zones VALUES (%s,%s,%s)", zone_tuples)
 
-            # Updating times
-            from datetime import date, timedelta
-            curs.execute("SELECT year, month, day, dayofweek FROM times ORDER BY id DESC LIMIT 1")
-            days_range = []
-            if curs.rowcount > 0:
-                (year, month, day, dayofweek) = curs.fetchone()
-                lastday = date(year, month, day)
-                today = date.today()
-                delta = today - lastday
-                days_range = list((lastday + timedelta(days=x) for x in range(1, delta.days + 1)))
-            else:
-                days_range = [date.today()]
-
-            if days_range:
+            # Load times
+            if times:
                 def dayoffweek_asrus(day_number):
                     return {
                         0: "Понедельник",
@@ -65,19 +54,26 @@ def load_dimensions(postgres_injection, dimens):
                         6: "Воскресенье"
                     }[day_number]
 
-                days_tuples = list(map(
-                    lambda x: (x.year, x.month, x.day, dayoffweek_asrus(x.weekday())),
-                    days_range
+                times_tuples = list(map(
+                    lambda x: (x.datetime.year,
+                               x.datetime.month,
+                               x.datetime.day,
+                               dayoffweek_asrus(x.datetime.weekday()),
+                               x.datetime.time()
+                               ),
+                    times
                 ))
-                curs.executemany(
-                    "INSERT INTO times (id, year, month, day, dayofweek) VALUES (DEFAULT,%s,%s,%s,%s)",
-                    days_tuples
-                )
+                curs.executemany("""
+                                 INSERT INTO times (id, year, month, day, dayofweek, time)
+                                 VALUES (DEFAULT,%s,%s,%s,%s,%s)
+                                 """,
+                                 times_tuples)
 
         logging.info("Dimensions loaded.")
 
     except Exception as e:
         logging.error("Exception in dimensions loading: " + e.args[0])
+        print(e.args[1])
 
 
 # TODO : сделать, когда появится информация
@@ -89,14 +85,14 @@ def load_facts(postgres_injection, facts):
         with postgres_injection.connection() as connection, connection.cursor() as curs:
             if checkins:
                 checkins_tuples = list(map(
-                    lambda x: (x.client_id, x.entertainment_id, x.time_id, x.url, x.datetime.time(), x.longtitude, x.latitude),
+                    lambda x: (x.client_id, x.entertainment_id, x.time_id, x.url, x.longtitude, x.latitude),
                     checkins
                 ))
 
                 curs.executemany(
                     """
-                    INSERT INTO checkins (client_id, entertainment_id, time_id, url, time, longtitude, latitude)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    INSERT INTO checkins (client_id, entertainment_id, time_id, url, longtitude, latitude)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     checkins_tuples
                 )

@@ -41,3 +41,9 @@ class Zone(object):
         self.title = title
         self.date_created = date_created
         self.polygon = polygon
+
+
+# Самый полезный класс здесь
+class Time(object):
+    def __init__(self, datetime):
+        self.datetime = datetime

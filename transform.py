@@ -13,6 +13,7 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     entertainments = []
     clients = []
     zones = []
+    times = []
 
     # set zones
     try:
@@ -56,6 +57,7 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     except Exception as e:
         logging.error("Exception in transforming entertainments data: ", e.args[0])
 
+    # set clients
     try:
         for data in clients_instagram:
             url = data[INSTA_USER_URL]
@@ -64,8 +66,17 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     except Exception as e:
         logging.error("Exception in transforming clients data: ", e.args[0])
 
+    # set clients times
+    try:
+        import dateutil.parser
+        for data in clients_instagram:
+            datetime = dateutil.parser.parse(data[INSTA_DATETIME])
+            times.append(Time(datetime))
+    except Exception as e:
+        logging.error("Exception in transforming times data: ", e.args[0])
+
     logging.info("Dimensions transformed.")
-    return entertainments, clients, zones
+    return entertainments, clients, zones, times
 
 
 def transform_facts(postgres_injection, checkins_instagram):
@@ -128,9 +139,9 @@ def transform_facts(postgres_injection, checkins_instagram):
                     """
                     SELECT id
                     FROM times
-                    WHERE year = %s and month=%s and day=%s
+                    WHERE year = %s and month=%s and day=%s AND time=%s
                     """,
-                    (row.datetime.year, row.datetime.month, row.datetime.day)
+                    (row.datetime.year, row.datetime.month, row.datetime.day, row.datetime.time())
                 )
                 if curs.rowcount > 0:
                     time_id = curs.fetchone()

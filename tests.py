@@ -83,13 +83,13 @@ def test_integrated_woextract():
     postgres_injection = PostgresInjection()
 
     checkins_instagram = list(map(lambda x: {
-        INSTA_URL: "http://instagram.com/someurl",
+        INSTA_URL: "http://instagram.com/someurl"+str(x),
         INSTA_USERNAME: "username",
-        INSTA_USER_URL: "http://instagram.com/username_url",
-        INSTA_DATETIME: "2015-11-23 01:31:39 UTC",
+        INSTA_USER_URL: "http://instagram.com/username_url"+str(x),
+        INSTA_DATETIME: "2015-11-23 01:31:3" + str(x) + " UTC",
         INSTA_LONGTITUDE: "0.0",
         INSTA_LATITUDE: "0.0"
-    }, range(1)))
+    }, range(10)))
 
     entertainments_datamosru = list(map(lambda x: {
         ENTERTAINMENTS_TITLE: "title",
@@ -105,9 +105,9 @@ def test_integrated_woextract():
 
     polygons_nowhere = []
 
-    (ents, clients, zones) = transform_dimensions(entertainments_datamosru, checkins_instagram, zones_datamosru, polygons_nowhere)
+    (ents, clients, zones, times) = transform_dimensions(entertainments_datamosru, checkins_instagram, zones_datamosru, polygons_nowhere)
 
-    load_dimensions(postgres_injection, [ents, clients, zones])
+    load_dimensions(postgres_injection, [ents, clients, zones, times])
     facts = transform_facts(postgres_injection, checkins_instagram)
     load_facts(postgres_injection, [facts])
 
