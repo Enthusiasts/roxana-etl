@@ -16,7 +16,8 @@ def main_test():
     #test_load_dimensions()
     #test_transform_facts()
     #test_load_facts()
-    test_integrated_woextract()
+    test_extract()
+    #test_integrated_woextract()
 
 # Использовать для очистки тестовой БД.
 def clear_db():
@@ -111,3 +112,6 @@ def test_integrated_woextract():
     facts = transform_facts(postgres_injection, checkins_instagram)
     load_facts(postgres_injection, [facts])
 
+def test_extract():
+    import extract
+    print(extract.extract_dimensions())

@@ -2,12 +2,13 @@
 
 import json
 import os
+import codecs
 from default_raw_paths import *
 
 
 def __from(raw_directory):
     filenames = os.listdir(raw_directory)
-    files = list(map(lambda x: open(os.path.join(raw_directory, x), 'r'), filenames))
+    files = list(map(lambda x: codecs.open(os.path.join(raw_directory, x), 'r', encoding='utf-8'), filenames))
     jsons = list(map(lambda x: json.load(x), files))
     map(lambda x: x.close(), files)
     return jsons
