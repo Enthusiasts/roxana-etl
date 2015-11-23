@@ -1,3 +1,5 @@
+# Enthusiasts, 2015
+
 import logging
 import time
 
@@ -5,7 +7,13 @@ from models import *
 from data_consts import *
 
 
-def transform_dimensions(entertainments_datamosru, clients_instagram, zones_datamosru, polygons_nowhere):
+def transform_dimensions(dimens):
+    entertainments_datamosru = dimens[0]
+    # TODO: перенести куда-нибудь или запилить в экстракте
+    clients_instagram = []
+    zones_datamosru = dimens[1]
+    # TODO: перенести куда-нибудь или запилить в экстракте
+    polygons_nowhere = []
     # TODO: CHECK IT
     # TODO: I'M SERIUSLY
     # Times будет генерироваться в лоаде сразу.
@@ -24,6 +32,7 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     except Exception as e:
         logging.error("Exception in transforming zones data: ", e.args[0])
 
+    # TODO: not working yet
     # set polygons to zone
     try:
         for data in polygons_nowhere:
@@ -57,6 +66,7 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     except Exception as e:
         logging.error("Exception in transforming entertainments data: ", e.args[0])
 
+    # TODO: not working yet
     # set clients
     try:
         for data in clients_instagram:
@@ -76,10 +86,15 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
         logging.error("Exception in transforming times data: ", e.args[0])
 
     logging.info("Dimensions transformed.")
-    return entertainments, clients, zones, times
+
+    # TODO: Clients не возвращается
+    dimens[0] = entertainments
+    dimens[1] = zones
+    dimens.append(times)
 
 
-def transform_facts(postgres_injection, checkins_instagram):
+def transform_facts(postgres_injection, facts):
+    checkins_instagram = facts[0]
     # Здесь будут маппинг к entertainments по геопозиции, к times по времени, к clients по юзернейму.
     # Construct big table base
     table = []
@@ -159,4 +174,4 @@ def transform_facts(postgres_injection, checkins_instagram):
         import traceback
         traceback.print_exc()
 
-    return table
+    facts[0] = table

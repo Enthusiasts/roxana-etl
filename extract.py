@@ -46,4 +46,4 @@ def extract_dimensions():
 # TODO : сделать, когда появится информация
 def extract_facts():
     print("de facto no facts. go away")
-    return {"WTF": "You've been had by Ace Ventura"}
+    return [[{"WTF": "You've been had by Ace Ventura"}]]
