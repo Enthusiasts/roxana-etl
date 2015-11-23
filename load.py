@@ -77,10 +77,31 @@ def load_dimensions(postgres_injection, dimens):
         logging.info("Dimensions loaded.")
 
     except Exception as e:
-        logging.error("Exception in load: " + e.args[0])
+        logging.error("Exception in dimensions loading: " + e.args[0])
 
 
 # TODO : сделать, когда появится информация
 # TODO: информация появилась, надо сделать
-def load_facts(postgres_injection, checkins):
-    print("de facto no facts. nothing to load")
+def load_facts(postgres_injection, facts):
+    checkins = facts[0]
+
+    try:
+        with postgres_injection.connection() as connection, connection.cursor() as curs:
+            if checkins:
+                checkins_tuples = list(map(
+                    lambda x: (x.client_id, x.entertainment_id, x.time_id, x.url, x.datetime.time(), x.longtitude, x.latitude),
+                    checkins
+                ))
+
+                curs.executemany(
+                    """
+                    INSERT INTO checkins (client_id, entertainment_id, time_id, url, time, longtitude, latitude)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    """,
+                    checkins_tuples
+                )
+
+        logging.info("Facts loaded.")
+
+    except Exception as e:
+        logging.error("Exception in facts loading: " + e.args[0])

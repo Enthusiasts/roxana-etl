@@ -64,6 +64,7 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     except Exception as e:
         logging.error("Exception in transforming clients data: ", e.args[0])
 
+    logging.info("Dimensions transformed.")
     return entertainments, clients, zones
 
 

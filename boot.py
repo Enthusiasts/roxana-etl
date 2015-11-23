@@ -1,6 +1,6 @@
 # Enthusiasts, 2015
 
-from tests import *
+import logging
 
 # True - test mode, False - Work mode
 TEST = True
@@ -41,6 +41,8 @@ def main():
 logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 if TEST:
+    # В тестах теперь появился метод очистки БД, поэтому тот файлик в продакшн боюсь совать.
+    from tests import *
     main_test()
 else:
     main()

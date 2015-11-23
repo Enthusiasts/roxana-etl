@@ -25,9 +25,9 @@ class CheckIn(object):
         self.username = username
         self.username_url = username_url
 
-        self.client_id = 0
-        self.entertainment_id = 0
-        self.time_id = 0
+        self.client_id = None
+        self.entertainment_id = None
+        self.time_id = None
 
 
 class Client(object):
