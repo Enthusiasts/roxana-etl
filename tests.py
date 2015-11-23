@@ -7,6 +7,13 @@ from load import *
 import models
 from postgres import *
 
+# TODO: Тесты для отдела тестирования тоже сюда можно писать
+
+
+def main_test():
+    test_load_dimensions()
+    test_transform_facts()
+
 
 def test_load_dimensions():
     postgres_injection = PostgresInjection()

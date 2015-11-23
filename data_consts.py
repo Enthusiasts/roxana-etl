@@ -4,6 +4,7 @@
 TYPE_DIMENS = 0
 TYPE_FACTS = 1
 
+# TODO: REMOVE UNUSED
 # json keys
 ZONE_TITLE = "ObjectShortName"
 POLYGONS_TITLE = "p_title"

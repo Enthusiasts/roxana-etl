@@ -1,14 +1,15 @@
+# Enthusiasts, 2015
+
 import logging
 
-__author__ = 'someone'
+# TODO: Закончить обработку
 
 
-def load(postgres_injection, entertainments, checkins, clients, zones):
-    logging.info("Loaded.")
-    return 0
+def load_dimensions(postgres_injection, dimens):
+    entertainments = dimens[0]
+    clients = dimens[1]
+    zones = dimens[2]
 
-
-def load_dimensions(postgres_injection, entertainments, clients, zones):
     try:
         # Transaction in curs scope.
         with postgres_injection.connection() as connection, connection.cursor() as curs:
@@ -79,5 +80,6 @@ def load_dimensions(postgres_injection, entertainments, clients, zones):
         logging.error("Exception in load: " + e.args[0])
 
 
+# TODO : сделать, когда появится информация
 def load_facts(postgres_injection, checkins):
-    pass
+    print("de facto no facts. nothing to load")

@@ -20,32 +20,27 @@ def old_main():
 # TODO: прописать все необходимые входные пареметры функциям
 def etl_process(target):
     if target == TYPE_DIMENS:
-        dimens = extract('''do here''')
+        dimens = extract_dimensions()
         transform_dimensions(dimens)
         load_dimensions(dimens)
     elif(target == TYPE_FACTS):
-        facts = extract('''do here''')
+        facts = extract_facts()
         transform_facts(facts)
         load_facts(facts)
     else:
         print("Target type is invalid")
 
 
-# tests function
-def test():
-    test_load_dimensions()
-    test_transform_facts()
-
-
 # processing function
 def main():
     etl_process(TYPE_DIMENS)
-    etl_process(TYPE_DIMENS)
+    etl_process(TYPE_FACTS)
 
 # script start
+# TODO: Может заменить все принты на логи, все логи на принты, или дублировать одно с другим?
 logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 
 if TEST:
-    test()
+    main_test()
 else:
     main()
