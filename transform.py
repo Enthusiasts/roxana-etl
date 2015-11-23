@@ -64,12 +64,14 @@ def transform_dimensions(entertainments_datamosru, clients_instagram, zones_data
     except Exception as e:
         logging.error("Exception in transforming clients data: ", e.args[0])
 
+    return entertainments, clients, zones
+
 
 def transform_facts(postgres_injection, checkins_instagram):
     # Здесь будут маппинг к entertainments по геопозиции, к times по времени, к clients по юзернейму.
+    # Construct big table base
+    table = []
     try:
-        # Construct big table base
-        table = []
         for data in checkins_instagram:
             url = data[INSTA_URL]
             username = data[INSTA_USERNAME]
@@ -144,3 +146,5 @@ def transform_facts(postgres_injection, checkins_instagram):
         logging.error("Exception in facts transform: " + e.args[0])
         import traceback
         traceback.print_exc()
+
+    return table

@@ -13,7 +13,7 @@ def load_dimensions(postgres_injection, dimens):
     try:
         # Transaction in curs scope.
         with postgres_injection.connection() as connection, connection.cursor() as curs:
-            # TODO: handle updates!!!
+            # TODO: handle on conflict!!!
             # Load entertainments
             if entertainments:
                 ent_tuples = list(map(
@@ -30,7 +30,7 @@ def load_dimensions(postgres_injection, dimens):
                     lambda x: (x.title, x.url),
                     clients
                 ))
-                curs.executemany("INSERT INTO zones VALUES (DEFAULT,%s,%s)", client_tuples)
+                curs.executemany("INSERT INTO clients VALUES (DEFAULT,%s,%s)", client_tuples)
 
             # Load zones
             if zones:
@@ -81,5 +81,6 @@ def load_dimensions(postgres_injection, dimens):
 
 
 # TODO : сделать, когда появится информация
+# TODO: информация появилась, надо сделать
 def load_facts(postgres_injection, checkins):
     print("de facto no facts. nothing to load")
