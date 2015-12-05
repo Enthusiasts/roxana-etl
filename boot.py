@@ -8,18 +8,18 @@ import models
 from postgres import *
 
 # True - test mode, False - Work mode
-TEST = True
+TEST = False
 
 
 def etl_process(target, postgres_injection):
     if target == TYPE_DIMENS:
         dimens = extract_dimensions()
-        transform_dimensions(dimens)
-        load_dimensions(postgres_injection, dimens)
+        (ents, clients, zones, times) = transform_dimensions(dimens)
+        load_dimensions(postgres_injection, [ents, clients, zones, times])
     elif target == TYPE_FACTS:
         facts = extract_facts()
-        transform_facts(postgres_injection, facts)
-        load_facts(postgres_injection, facts)
+        checkins = transform_facts(postgres_injection, facts)
+        load_facts(postgres_injection, [checkins])
     else:
         print("Target type is invalid")
 

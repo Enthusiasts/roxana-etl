@@ -2,6 +2,7 @@
 
 from transform import *
 from load import *
+from extract import *
 import models
 from postgres import *
 
@@ -16,8 +17,9 @@ def main_test():
     #test_load_dimensions()
     #test_transform_facts()
     #test_load_facts()
-    test_extract()
+    #test_extract()
     #test_integrated_woextract()
+    test_integrated_entsonly()
 
 # Использовать для очистки тестовой БД.
 def clear_db():
@@ -35,7 +37,7 @@ def test_load_dimensions():
 
     ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title", 0.0, 0.0, 100, False), range(10)))
 
-    load_dimensions(postgres_injection, [ents, None, None])
+    load_dimensions(postgres_injection, [ents, None, None, None])
 
 
 def test_transform_facts():
@@ -50,7 +52,7 @@ def test_transform_facts():
         INSTA_LATITUDE: "0.0"
     }, range(10)))
 
-    transform_facts(postgres_injection, checkins_instagram)
+    transform_facts(postgres_injection, [checkins_instagram])
 
 def test_transform_dimensions():
     postgres_injection = PostgresInjection()
@@ -65,7 +67,13 @@ def test_transform_dimensions():
         INSTA_LATITUDE: "0.0"
     }, range(10)))
 
-    transform_dimensions([], checkins_instagram, [], [])
+    transform_dimensions(
+        {
+        "Entertainments": [[]],
+        "Zones": [[]],
+        "Clients": [checkins_instagram],
+        "Polygons": [[]]
+    })
 
 def test_load_facts():
     postgres_injection = PostgresInjection()
@@ -93,25 +101,42 @@ def test_integrated_woextract():
     }, range(10)))
 
     entertainments_datamosru = list(map(lambda x: {
-        ENTERTAINMENTS_TITLE: "title",
-        ENTERTAINMENTS_COST: "100",
-        ENTERTAINMENTS_LONGITUDE: 0.0,
-        ENTERTAINMENTS_LATITUDE: 0.0,
-        ENTERTAINMENTS_ZONE_TITLE: "zone_title",
-        ENTERTAINMENTS_SEAT_COUNT: 100,
-        ENTERTAINMENTS_SOCIAL_PRIVELEGES: False
+        "Id": 0,
+        "RandomInfo": "random",
+        ENTERTAINMENTS_TYPE: "type",
+        "Cells": {
+            ENTERTAINMENTS_TITLE: "title",
+            ENTERTAINMENTS_COST: "100",
+            ENTERTAINMENTS_LONGITUDE: 0.0,
+            ENTERTAINMENTS_LATITUDE: 0.0,
+            ENTERTAINMENTS_ZONE_TITLE: "zone_title",
+            ENTERTAINMENTS_SEAT_COUNT: 100,
+            ENTERTAINMENTS_SOCIAL_PRIVELEGES: False
+        }
     }, range(10)))
 
     zones_datamosru = []
 
     polygons_nowhere = []
 
-    (ents, clients, zones, times) = transform_dimensions(entertainments_datamosru, checkins_instagram, zones_datamosru, polygons_nowhere)
+    (ents, clients, zones, times) = transform_dimensions(
+        {
+        "Entertainments": [entertainments_datamosru],
+        "Zones": [zones_datamosru],
+        "Clients": [checkins_instagram],
+        "Polygons": [polygons_nowhere]
+    })
 
     load_dimensions(postgres_injection, [ents, clients, zones, times])
-    facts = transform_facts(postgres_injection, checkins_instagram)
+    facts = transform_facts(postgres_injection, [checkins_instagram])
     load_facts(postgres_injection, [facts])
 
 def test_extract():
-    import extract
-    print(extract.extract_dimensions())
+    jsons_dims = extract_dimensions()
+    print(jsons_dims["Entertainments"][0])
+
+def test_integrated_entsonly():
+    jsons_dims = extract_dimensions()
+    (ents, clients, zones, times) = transform_dimensions(jsons_dims)
+    postgres = PostgresInjection()
+    load_dimensions(postgres, [ents, clients, zones, times])

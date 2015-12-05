@@ -1,6 +1,7 @@
 # Enthusiasts, 2015
 
 import logging
+import data_consts
 
 # TODO: Закончить обработку
 
@@ -11,6 +12,8 @@ def load_dimensions(postgres_injection, dimens):
     zones = dimens[2]
     times = dimens[3]
 
+    varchar_maxnum = data_consts.VARCHAR_MAXNUMBER
+
     try:
         # Transaction in curs scope.
         with postgres_injection.connection() as connection, connection.cursor() as curs:
@@ -19,11 +22,12 @@ def load_dimensions(postgres_injection, dimens):
             if entertainments:
                 ent_tuples = list(map(
                     lambda x: (
-                        x.title, x.cost, x.zone_title, x.longitude, x.latitude, x.seats_count, x.social_priveleges
+                        x.title[:varchar_maxnum], x.cost, x.zone_title[:varchar_maxnum], x.longitude,
+                        x.latitude, x.seats_count, x.social_priveleges, x.type[:varchar_maxnum]
                     ),
                     entertainments
                 ))
-                curs.executemany("INSERT INTO entertainments VALUES (DEFAULT, %s,%s,%s,%s,%s,%s,%s)", ent_tuples)
+                curs.executemany("INSERT INTO entertainments VALUES (DEFAULT, %s,%s,%s,%s,%s,%s,%s, %s)", ent_tuples)
 
             # Load clients
             if clients:

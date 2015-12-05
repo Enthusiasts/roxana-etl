@@ -8,15 +8,27 @@ from data_consts import *
 
 
 def transform_dimensions(dimens):
-    entertainments_datamosru = dimens[0]
-    # TODO: перенести куда-нибудь или запилить в экстракте
-    clients_instagram = []
-    zones_datamosru = dimens[1]
-    # TODO: перенести куда-нибудь или запилить в экстракте
-    polygons_nowhere = []
-    # TODO: CHECK IT
-    # TODO: I'M SERIUSLY
-    # Times будет генерироваться в лоаде сразу.
+    # Разбираем по источникам, у каждого источника по сути своя трансформация.
+    if dimens["Entertainments"]:
+        entertainments_datamosru = dimens["Entertainments"][0]
+        #entertainments_anothersourse = dimens["Entertainments"][1]
+    else:
+        entertainments_datamosru = []
+
+    if dimens["Clients"]:
+        clients_instagram = dimens["Clients"][0]
+    else:
+        clients_instagram = []
+
+    if dimens["Zones"]:
+        zones_datamosru = dimens["Zones"][0]
+    else:
+        zones_datamosru = []
+
+    if dimens["Polygons"]:
+        polygons_nowhere = dimens["Polygons"][0]
+    else:
+        polygons_nowhere = []
 
     entertainments = []
     clients = []
@@ -53,20 +65,24 @@ def transform_dimensions(dimens):
 
     # set entertainments
     try:
-        # verify this code after finishing developing extracting entertainments data
+        # Парсим "да"/"нет" в bool
+        def __yn2boll(word):
+            return word.lower() == "да"
+
         for i in range(0, len(entertainments_datamosru)):
-            title = entertainments_datamosru[i][ENTERTAINMENTS_ZONE_TITLE]
-            cost = entertainments_datamosru[i][ENTERTAINMENTS_COST]
-            zone_title = entertainments_datamosru[i][ENTERTAINMENTS_ZONE_TITLE]
-            lon = entertainments_datamosru[i][ENTERTAINMENTS_LONGITUDE]
-            lat = entertainments_datamosru[i][ENTERTAINMENTS_LATITUDE]
-            seat = entertainments_datamosru[i][ENTERTAINMENTS_SEAT_COUNT]
-            social = entertainments_datamosru[i][ENTERTAINMENTS_SOCIAL_PRIVELEGES]
-            entertainments.append(Entertainment(title, cost, zone_title, lon, lat, seat, social))
+            title = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_TITLE]
+            #cost = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_COST]
+            cost = 0
+            zone_title = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_ZONE_TITLE]
+            lon = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LONGITUDE]
+            lat = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LATITUDE]
+            seat = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_SEAT_COUNT]
+            social = __yn2boll(entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_SOCIAL_PRIVELEGES])
+            type = entertainments_datamosru[i][ENTERTAINMENTS_TYPE]
+            entertainments.append(Entertainment(title, cost, zone_title, lon, lat, seat, social, type))
     except Exception as e:
         logging.error("Exception in transforming entertainments data: ", e.args[0])
 
-    # TODO: not working yet
     # set clients
     try:
         for data in clients_instagram:
@@ -87,15 +103,16 @@ def transform_dimensions(dimens):
 
     logging.info("Dimensions transformed.")
 
-    # TODO: Clients не возвращается
-    dimens[0] = entertainments
-    dimens[1] = zones
-    dimens.append(times)
-
+    return entertainments, clients, zones, times
 
 def transform_facts(postgres_injection, facts):
-    checkins_instagram = facts[0]
-    # Здесь будут маппинг к entertainments по геопозиции, к times по времени, к clients по юзернейму.
+    # Разбираем по источникам, у каждого источника по сути своя трансформация.
+    if facts["Checkins"]:
+        checkins_instagram = facts["Checkins"][0]
+    else:
+        checkins_instagram = []
+
+    # Здесь маппинг к entertainments по геопозиции, к times по времени, к clients по юзернейму.
     # Construct big table base
     table = []
     try:
@@ -174,4 +191,4 @@ def transform_facts(postgres_injection, facts):
         import traceback
         traceback.print_exc()
 
-    facts[0] = table
+    return table
