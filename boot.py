@@ -8,7 +8,7 @@ import models
 from postgres import *
 
 # True - test mode, False - Work mode
-TEST = False
+TEST = True
 
 
 def etl_process(target, postgres_injection):

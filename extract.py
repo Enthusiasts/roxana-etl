@@ -43,9 +43,9 @@ def extract_dimensions():
 
     from itertools import chain
     ents_data_mos_ru_mapped = [
-        map(
+        list(map(
             lambda t: __add_type_entry(t, name)
-            , jsons)
+            , jsons))
         for x in DEF_PATHS_DIMENSIONS_ENTERTAINMENTS
         for (name, jsons) in __from(x)
     ]
@@ -53,13 +53,13 @@ def extract_dimensions():
     ents = [list(chain.from_iterable(ents_data_mos_ru_mapped))]
 
     logging.info("Extract of zones started")
-    zones = list(chain.from_iterable(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_ZONES)))
+    zones = list(chain.from_iterable(list(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_ZONES))))
 
     logging.info("Extract of clients started")
-    clients = list(chain.from_iterable(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_CLIENTS)))
+    clients = list(chain.from_iterable(list(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_CLIENTS))))
 
     logging.info("Extract of polygons started")
-    pols = list(chain.from_iterable(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_POLYGONS)))
+    pols = list(chain.from_iterable(list(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_POLYGONS))))
 
     return {
         "Entertainments": ents,
