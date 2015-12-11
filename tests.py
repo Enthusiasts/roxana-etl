@@ -12,7 +12,7 @@ from postgres import *
 # По сути всё, кроме пометки integrated - юнит-тесты.
 
 def main_test():
-    #clear_db()
+    clear_db()
     #test_transform_dimensions()
     test_load_dimensions()
     #test_transform_facts()

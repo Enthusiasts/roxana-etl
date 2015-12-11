@@ -8,7 +8,7 @@ import models
 from postgres import *
 
 # True - test mode, False - Work mode
-TEST = False
+TEST = True
 
 
 def etl_process(target, postgres_injection):
@@ -33,6 +33,7 @@ def main():
 # script start
 # TODO: Может заменить все принты на логи, все логи на принты, или дублировать одно с другим?
 logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
+logging.info("======================")
 
 if TEST:
     # В тестах теперь появился метод очистки БД, поэтому тот файлик в продакшн боюсь совать.
