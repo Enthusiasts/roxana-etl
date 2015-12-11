@@ -14,12 +14,12 @@ from postgres import *
 def main_test():
     clear_db()
     #test_transform_dimensions()
-    #test_load_dimensions()
+    test_load_dimensions()
     #test_transform_facts()
     #test_load_facts()
     #test_extract()
     #test_integrated_woextract()
-    test_integrated_entsonly()
+    #test_integrated_entsonly()
 
 # Использовать для очистки тестовой БД.
 def clear_db():
@@ -35,7 +35,7 @@ def clear_db():
 def test_load_dimensions():
     postgres_injection = PostgresInjection()
 
-    ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title", 0.0, 0.0, 100, False), range(10)))
+    ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title", 0.0, 0.0, 100, False, "ent_type"), range(10)))
 
     load_dimensions(postgres_injection, [ents, None, None, None])
 
@@ -124,7 +124,7 @@ def test_integrated_woextract():
         "Entertainments": [entertainments_datamosru],
         "Zones": [zones_datamosru],
         "Clients": [checkins_instagram],
-        "Polygons": [polygons_nowhere]
+        "Polygons": [polygons_nowhere],
     })
 
     load_dimensions(postgres_injection, [ents, clients, zones, times])

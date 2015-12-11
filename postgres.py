@@ -4,7 +4,7 @@ import psycopg2
 
 
 class PostgresInjection(object):
-    __dbConfig = dict(dbhost="localhost", dbport=5432, dbname="roxana", dbuser="roxana_consumer", dbpassword="qwerty1234")
+    __dbConfig = dict(dbhost="debalid-aws-instance.c5iybfyguusg.eu-west-1.rds.amazonaws.com", dbport=5432, dbname="roxana_test", dbuser="roxana_consumer", dbpassword="qwerty1234")
 
     def connection(self):
         return psycopg2.connect(host=self.__dbConfig["dbhost"],
