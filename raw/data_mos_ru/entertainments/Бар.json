@@ -1,0 +1,20 @@
+[
+  {
+    "Id":"68da0bd0-bc1c-4fbe-b081-0f7642e4493d",
+    "Number":1,
+    "Cells":
+    {
+      "global_id":20660775,
+      "Name":"assadasd",
+      "IsNetObject":"asd",
+      "OperatingCompany":null,
+      "AdmArea":"Западasdasdтивный округ",
+      "District":"Wau",
+      "Address":"пasdasdзала, дом 2",
+      "SeatsCount":32,
+      "SocialPrivileges":"нет",
+      "Longitude_WGS84":"37.5659800000000030",
+      "Latitude_WGS84":"55.7445689999999980"
+    }
+  }
+]

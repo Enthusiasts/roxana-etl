@@ -6,7 +6,7 @@
 
 
 class Entertainment(object):
-    def __init__(self, title, cost, zone_title, longitude, latitude, seats_count, social_priveleges, type):
+    def __init__(self, title, cost, zone_title, longitude, latitude, seats_count, social_priveleges, type, global_id):
         self.title = title
         self.cost = cost
         self.zone_title = zone_title
@@ -15,6 +15,7 @@ class Entertainment(object):
         self.seats_count = seats_count
         self.social_priveleges = social_priveleges
         self.type = type
+        self.global_id = global_id
 
 
 class CheckIn(object):

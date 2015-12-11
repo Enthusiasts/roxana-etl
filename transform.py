@@ -77,9 +77,10 @@ def transform_dimensions(dimens):
             lon = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LONGITUDE]
             lat = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LATITUDE]
             seat = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_SEAT_COUNT]
+            global_id = entertainments_datamosru[i]["Cells"]["global_id"]
             social = __yn2boll(entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_SOCIAL_PRIVELEGES])
             type = entertainments_datamosru[i][ENTERTAINMENTS_TYPE]
-            entertainments.append(Entertainment(title, cost, zone_title, lon, lat, seat, social, type))
+            entertainments.append(Entertainment(title, cost, zone_title, lon, lat, seat, social, type, global_id))
     except Exception as e:
         logging.error("Exception in transforming entertainments data: ", e.args[0])
 

@@ -12,7 +12,7 @@ from postgres import *
 # По сути всё, кроме пометки integrated - юнит-тесты.
 
 def main_test():
-    clear_db()
+    #clear_db()
     #test_transform_dimensions()
     test_load_dimensions()
     #test_transform_facts()
@@ -35,7 +35,7 @@ def clear_db():
 def test_load_dimensions():
     postgres_injection = PostgresInjection()
 
-    ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title", 0.0, 0.0, 100, False, "ent_type"), range(10)))
+    ents = list(map(lambda x: models.Entertainment("title", 100, "zone_title2", 0.0, 0.0, 100, False, "ent_type", x), range(10)))
 
     load_dimensions(postgres_injection, [ents, None, None, None])
 

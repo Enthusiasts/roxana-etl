@@ -22,12 +22,20 @@ def load_dimensions(postgres_injection, dimens):
             if entertainments:
                 ent_tuples = list(map(
                     lambda x: (
-                        x.title[:varchar_maxnum], x.cost, x.zone_title[:varchar_maxnum], x.longitude,
+                        x.global_id, x.title[:varchar_maxnum], x.cost, x.zone_title[:varchar_maxnum], x.longitude,
                         x.latitude, x.seats_count, x.social_priveleges, x.type[:varchar_maxnum]
                     ),
                     entertainments
                 ))
-                curs.executemany("INSERT INTO entertainments VALUES (DEFAULT, %s,%s,%s,%s,%s,%s,%s, %s)", ent_tuples)
+                for tuple in ent_tuples:
+                    curs.execute("SELECT FROM entertainments WHERE id =%s", (tuple[0],))
+                    if curs.rowcount == 0:
+                        curs.execute("INSERT INTO entertainments VALUES (%s, %s,%s,%s,%s,%s,%s,%s, %s)", tuple)
+                    else:
+                        curs.execute("UPDATE entertainments "
+                                     "SET title = %s, cost = %s, zone_title = %s,longtitude = %s,"
+                                     "latitude = %s, seats_count = %s, social_priveleges = %s,"
+                                     "type = %s WHERE id = %s", tuple[1:] + (tuple[0],))
 
             # Load clients
             if clients:
