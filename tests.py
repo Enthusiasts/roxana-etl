@@ -14,7 +14,7 @@ from postgres import *
 def main_test():
     clear_db()
     #test_transform_dimensions()
-    test_load_dimensions()
+    #test_load_dimensions()
     #test_transform_facts()
     #test_load_facts()
     #test_extract()
@@ -133,7 +133,13 @@ def test_integrated_woextract():
 
 def test_extract():
     jsons_dims = extract_dimensions()
-    print(jsons_dims["Entertainments"][0])
+    jsons_facts = extract_facts()
+    print(type(jsons_dims["Entertainments"][0]))
+    print(len(jsons_dims["Entertainments"][0]))
+    print(type(jsons_dims["Clients"][0]))
+    print(len(jsons_dims["Clients"][0]))
+    print(type(jsons_facts["Checkins"][0]))
+    print(len(jsons_facts["Checkins"][0]))
 
 def test_integrated_entsonly():
     jsons_dims = extract_dimensions()

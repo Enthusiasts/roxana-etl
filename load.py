@@ -43,7 +43,13 @@ def load_dimensions(postgres_injection, dimens):
                     lambda x: (x.title, x.url),
                     clients
                 ))
-                curs.executemany("INSERT INTO clients VALUES (DEFAULT,%s,%s)", client_tuples)
+                for tuple in client_tuples:
+                    curs.execute("SELECT FROM clients WHERE url =%s", (tuple[1],))
+                    if curs.rowcount == 0:
+                        curs.execute("INSERT INTO clients VALUES (DEFAULT,%s,%s)", tuple)
+                    else:
+                        #Клиент с таким url уже существует, думаю, можно не обновлять
+                        pass
 
             # Load zones
             if zones:
@@ -88,8 +94,6 @@ def load_dimensions(postgres_injection, dimens):
         print(e.args[1])
 
 
-# TODO : сделать, когда появится информация
-# TODO: информация появилась, надо сделать
 def load_facts(postgres_injection, facts):
     checkins = facts[0]
 

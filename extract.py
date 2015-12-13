@@ -9,11 +9,27 @@ import logging
 
 def __from(raw_directory):
     filenames = os.listdir(raw_directory)
-    files = list(map(lambda x: codecs.open(os.path.join(raw_directory, x), 'r', encoding='utf-8'), filenames))
+    files = list(map(lambda x: codecs.open(os.path.join(raw_directory, x), 'r', encoding='utf_8'), filenames))
     jsons = list(map(lambda x: (x.name, json.load(x)), files))
     map(lambda x: x.close(), files)
     return jsons
-
+'''
+def __from(raw_directory):
+    filenames = os.listdir(raw_directory)
+    #files = list(map(lambda x: codecs.open(os.path.join(raw_directory, x), 'r', encoding='utf_8'), filenames))
+    jsons = []
+    for fn in filenames:
+        file = codecs.open(os.path.join(raw_directory, fn), 'r', encoding='utf_8')
+        str_json = file.read()
+        print(fn)
+        print(type(str_json))
+        print(str_json)
+        jsons.append((fn, json.loads(str_json)))
+        file.close()
+ #   jsons = list(map(lambda x: (x.name, json.load(x)), files))
+    #map(lambda x: x.close(), files)
+    return jsons
+'''
 def extract_dimensions():
     # все данные боксятся к список, для удобства обработки внутри transform методов
     '''
@@ -56,7 +72,11 @@ def extract_dimensions():
     zones = list(chain.from_iterable(list(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_ZONES))))
 
     logging.info("Extract of clients started")
-    clients = list(chain.from_iterable(list(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_CLIENTS))))
+    clients = []
+    #clients = list(chain.from_iterable(list(map(lambda x: (__from(x)), DEF_PATHS_DIMENSIONS_CLIENTS))))
+    for path in DEF_PATHS_DIMENSIONS_CLIENTS:
+        jsons = __from(path)
+        clients.extend(list(map(lambda x: x[1], jsons)))
 
     logging.info("Extract of polygons started")
     pols = list(chain.from_iterable(list(map(lambda x: (__from(x))[1], DEF_PATHS_DIMENSIONS_POLYGONS))))
@@ -71,7 +91,10 @@ def extract_dimensions():
 
 def extract_facts():
     logging.info("Extract of facts started")
-    facts = list(map(lambda x: (__from(x))[1], DEF_PATHS_FACTS))
+    facts = []
+    for path in DEF_PATHS_FACTS:
+        jsons = __from(path)
+        facts.extend(list(map(lambda x: x[1], jsons)))
     return {
         "Checkins": facts
     }

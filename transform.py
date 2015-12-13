@@ -187,9 +187,26 @@ def transform_facts(postgres_injection, facts):
 
         logging.info("Facts transformed.")
 
+
     except Exception as e:
         logging.error("Exception in facts transform: " + e.args[0])
         import traceback
         traceback.print_exc()
 
-    return table
+    # TODO: пофиксить, очень грязный фикс!
+    table_wo_ununique = []
+    for x in table:
+        dub = list([y for y in table_wo_ununique if x.client_id == y.client_id and x.entertainment_id == y.entertainment_id and x.time_id == y.time_id])
+        #print(x)
+        #print(dub)
+        y = True
+        for z in dub:
+            if x.client_id == z.client_id and x.entertainment_id == z.entertainment_id and x.time_id == z.time_id:
+                y = False
+        if y:
+            table_wo_ununique.append(x)
+
+    print(len(table))
+    print(len(table_wo_ununique))
+    for x in table_wo_ununique: print(x)
+    return table_wo_ununique

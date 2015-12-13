@@ -5,7 +5,20 @@
 '''
 
 
-class Entertainment(object):
+class CommonEqualityMixin(object):
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__)
+            and self.__dict__ == other.__dict__)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+
+class Entertainment(CommonEqualityMixin):
     def __init__(self, title, cost, zone_title, longitude, latitude, seats_count, social_priveleges, type, global_id):
         self.title = title
         self.cost = cost
@@ -18,7 +31,7 @@ class Entertainment(object):
         self.global_id = global_id
 
 
-class CheckIn(object):
+class CheckIn(CommonEqualityMixin):
     def __init__(self, url, datetime, longitude, latitude, username, username_url):
         self.url = url
         self.datetime = datetime  # Тип datetime!
@@ -32,13 +45,13 @@ class CheckIn(object):
         self.time_id = None
 
 
-class Client(object):
+class Client(CommonEqualityMixin):
     def __init__(self, title, url):
         self.title = title
         self.url = url
 
 
-class Zone(object):
+class Zone(CommonEqualityMixin):
     def __init__(self, title, date_created, polygon):
         self.title = title
         self.date_created = date_created
@@ -46,6 +59,7 @@ class Zone(object):
 
 
 # Самый полезный класс здесь
-class Time(object):
+class Time(CommonEqualityMixin):
     def __init__(self, datetime):
         self.datetime = datetime
+
