@@ -30,8 +30,14 @@ class Entertainment(CommonEqualityMixin):
         self.type = type
         self.global_id = global_id
 
+    def __eq__(self, other):
+        return self.longitude == other.longitude and self.latitude == other.latitude and self.title == other.title
 
-class CheckIn(CommonEqualityMixin):
+    def __hash__(self):
+        return 961 * self.longitude.__hash__() + 31*self.latitude.__hash__() + self.title.__hash__()
+
+
+class CheckIn(object):
     def __init__(self, url, datetime, longitude, latitude, username, username_url):
         self.url = url
         self.datetime = datetime  # Тип datetime!
@@ -40,15 +46,32 @@ class CheckIn(CommonEqualityMixin):
         self.username = username
         self.username_url = username_url
 
-        self.client_id = None
-        self.entertainment_id = None
-        self.time_id = None
+        self.client_id = -1
+        self.entertainment_id = -1
+        #self.time_id = -1
+
+    def __eq__(self, other):
+        #return self.client_id == other.client_id and self.entertainment_id == other.entertainment_id #and self.time_id == other.time_id
+        return self.url == other.url
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        #return int(963*self.entertainment_id) + int(self.client_id) #+ int(31*self.time_id)
+        return self.url.__hash__()
 
 
 class Client(CommonEqualityMixin):
     def __init__(self, title, url):
         self.title = title
         self.url = url
+
+    def __eq__(self, other):
+        return self.title == other.title and self.url == other.url
+
+    def __hash__(self):
+        return 31*self.title.__hash__() + self.url.__hash__()
 
 
 class Zone(CommonEqualityMixin):

@@ -104,6 +104,11 @@ def transform_dimensions(dimens):
 
     logging.info("Dimensions transformed.")
 
+    # Очищаем дупликаты (если такие есть)
+    entertainments = list(set(entertainments))
+    cients = list(set(clients))
+    zones = (list(set(zones)))
+
     return entertainments, clients, zones, times
 
 def transform_facts(postgres_injection, facts):
@@ -128,6 +133,8 @@ def transform_facts(postgres_injection, facts):
             table.append(CheckIn(url, datetime, lon, lat, username, username_url))
 
         # Mapping to existing entities
+        transformed = 0
+        lastval_printed = 0
         with postgres_injection.connection() as connection, connection.cursor() as curs:
             for row in table:
                 # Map entertainment
@@ -140,7 +147,7 @@ def transform_facts(postgres_injection, facts):
                     (str(row.longtitude), str(GEO_EPSILON), str(row.latitude), str(GEO_EPSILON))
                 )
                 if curs.rowcount > 0:
-                    ent_id = curs.fetchone()
+                    (ent_id,) = curs.fetchone()
                     row.entertainment_id = ent_id
                 else:
                     logging.info(
@@ -167,7 +174,7 @@ def transform_facts(postgres_injection, facts):
                     )
 
                 # Map time
-
+                '''
                 curs.execute(
                     """
                     SELECT id
@@ -177,13 +184,18 @@ def transform_facts(postgres_injection, facts):
                     (row.datetime.year, row.datetime.month, row.datetime.day, row.datetime.time())
                 )
                 if curs.rowcount > 0:
-                    time_id = curs.fetchone()
+                    (time_id,) = curs.fetchone()
                     row.time_id = time_id
                 else:
                     logging.info(
                         "Cannot find a client for checkin: " +
                         row.url + " (" + str(row.longtitude) + ", " + str(row.latitude) + ")"
                     )
+                '''
+                transformed += 1
+                if (transformed - lastval_printed) == 1000:
+                    print(str(transformed) + " / " + str(len(table)) + " transformed.")
+                    lastval_printed = transformed
 
         logging.info("Facts transformed.")
 
@@ -193,20 +205,5 @@ def transform_facts(postgres_injection, facts):
         import traceback
         traceback.print_exc()
 
-    # TODO: пофиксить, очень грязный фикс!
-    table_wo_ununique = []
-    for x in table:
-        dub = list([y for y in table_wo_ununique if x.client_id == y.client_id and x.entertainment_id == y.entertainment_id and x.time_id == y.time_id])
-        #print(x)
-        #print(dub)
-        y = True
-        for z in dub:
-            if x.client_id == z.client_id and x.entertainment_id == z.entertainment_id and x.time_id == z.time_id:
-                y = False
-        if y:
-            table_wo_ununique.append(x)
-
-    print(len(table))
-    print(len(table_wo_ununique))
-    for x in table_wo_ununique: print(x)
+    table_wo_ununique = list(set(table))
     return table_wo_ununique

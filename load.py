@@ -59,8 +59,9 @@ def load_dimensions(postgres_injection, dimens):
                 ))
                 curs.executemany("INSERT INTO zones VALUES (%s,%s,%s)", zone_tuples)
 
+
             # Load times
-            if times:
+            '''if times:
                 def dayoffweek_asrus(day_number):
                     return {
                         0: "Понедельник",
@@ -85,7 +86,7 @@ def load_dimensions(postgres_injection, dimens):
                                  INSERT INTO times (id, year, month, day, dayofweek, time)
                                  VALUES (DEFAULT,%s,%s,%s,%s,%s)
                                  """,
-                                 times_tuples)
+                                 times_tuples)'''
 
         logging.info("Dimensions loaded.")
 
@@ -100,18 +101,54 @@ def load_facts(postgres_injection, facts):
     try:
         with postgres_injection.connection() as connection, connection.cursor() as curs:
             if checkins:
-                checkins_tuples = list(map(
+
+                def dayoffweek_asrus(day_number):
+                    return {
+                        0: "Понедельник",
+                        1: "Вторник",
+                        2: "Среда",
+                        3: "Четверг",
+                        4: "Пятница",
+                        5: "Суббота",
+                        6: "Воскресенье"
+                    }[day_number]
+
+                '''checkins_tuples = list(map(
                     lambda x: (x.client_id, x.entertainment_id, x.time_id, x.url, x.longtitude, x.latitude),
                     checkins
-                ))
+                ))'''
 
-                curs.executemany(
+                '''curs.executemany(
                     """
                     INSERT INTO checkins (client_id, entertainment_id, time_id, url, longtitude, latitude)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     checkins_tuples
-                )
+                )'''
+                loaded = 0
+                lastval_printed = 0
+                for checkin in checkins :
+                    if checkin.entertainment_id >= 0 and checkin.client_id >= 0 :#and checkin.time_id >= 0:
+                        curs.execute(
+                            """
+                            INSERT INTO times (id, year, month, day, dayofweek, time)
+                            VALUES (DEFAULT,%s,%s,%s,%s,%s)
+                            RETURNING id
+                            """, (checkin.datetime.year, checkin.datetime.month, checkin.datetime.day,
+                                  dayoffweek_asrus(checkin.datetime.weekday()), checkin.datetime.time()))
+                        (time_id,) = curs.fetchone()
+                        curs.execute(
+                        """
+                        INSERT INTO checkins (client_id, entertainment_id, time_id, url, longtitude, latitude)
+                        VALUES (%s, %s, %s, %s, %s, %s)
+                        """, (checkin.client_id, checkin.entertainment_id, time_id, checkin.url, checkin.longtitude,
+                              checkin.latitude))
+                        connection.commit()
+                        loaded += 1
+                        if (loaded - lastval_printed) == 1000:
+                            print(str(loaded) + " / " + str(len(checkins)) + " loaded.")
+                            lastval_printed = loaded
+                logging.info(str(loaded) + " checkins from " + str(len(checkins)) + " loaded.")
 
         logging.info("Facts loaded.")
 
