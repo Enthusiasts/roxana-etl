@@ -28,7 +28,7 @@ def load_dimensions(postgres_injection, dimens):
                     entertainments
                 ))
                 for tuple in ent_tuples:
-                    curs.execute("SELECT FROM entertainments WHERE id =%s", (tuple[0],))
+                    curs.execute("SELECT * FROM entertainments WHERE id =%s", (tuple[0],))
                     if curs.rowcount == 0:
                         curs.execute("INSERT INTO entertainments VALUES (%s, %s,%s,%s,%s,%s,%s,%s, %s)", tuple)
                     else:
