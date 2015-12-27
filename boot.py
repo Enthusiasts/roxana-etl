@@ -6,32 +6,27 @@ from transform import *
 from load import *
 import models
 from postgres import *
+from clusterize import *
 
 # True - test mode, False - Work mode
 TEST = False
 
 
-def etl_process(target, postgres_injection):
-    if target == TYPE_DIMENS:
-        dimens = extract_dimensions()
-        (ents, clients, zones, times) = transform_dimensions(dimens)
-        load_dimensions(postgres_injection, [ents, clients, zones, times])
-    elif target == TYPE_FACTS:
-        facts = extract_facts()
-        checkins = transform_facts(postgres_injection, facts)
-        load_facts(postgres_injection, [checkins])
-    else:
-        print("Target type is invalid")
-
-
 # processing function
 def main():
     postgres_injection = PostgresInjection()
-    etl_process(TYPE_DIMENS, postgres_injection)
-    etl_process(TYPE_FACTS, postgres_injection)
 
-# script start
-# TODO: Может заменить все принты на логи, все логи на принты, или дублировать одно с другим?
+    dimens = extract_dimensions()
+    (ents, clients, zones, times) = transform_dimensions(dimens)
+    load_dimensions(postgres_injection, [ents, clients, zones, times])
+
+    facts = extract_facts()
+    checkins = transform_facts(postgres_injection, facts)
+    load_facts(postgres_injection, [checkins])
+
+    cluster_checkins(postgres_injection)
+
+
 logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
 logging.info("======================")
 

@@ -1,10 +1,5 @@
 # Enthusiasts, 2015
 
-# ETL processing data type
-TYPE_DIMENS = 0
-TYPE_FACTS = 1
-
-# TODO: REMOVE UNUSED
 # json keys
 ZONE_TITLE = "ObjectShortName"
 
@@ -12,7 +7,7 @@ POLYGONS_TITLE = "p_title"
 POLYGONS_DATA = "polygon"
 
 ENTERTAINMENTS_TITLE = "Name"
-ENTERTAINMENTS_COST = "cost" # Цена из другого источника браться будет.
+ENTERTAINMENTS_COST = "cost"
 ENTERTAINMENTS_LONGITUDE = "Longitude_WGS84"
 ENTERTAINMENTS_LATITUDE = "Latitude_WGS84"
 ENTERTAINMENTS_ZONE_TITLE = "District"
