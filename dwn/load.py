@@ -1,7 +1,9 @@
 # Enthusiasts, 2015
 
 import logging
-import data_consts
+
+from dwn import data_consts
+
 
 # TODO: Закончить обработку
 

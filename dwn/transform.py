@@ -3,8 +3,8 @@
 import logging
 import time
 
-from models import *
-from data_consts import *
+from dwn.data_consts import *
+from dwn.models import *
 
 
 def transform_dimensions(dimens):

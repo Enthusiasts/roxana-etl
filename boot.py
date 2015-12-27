@@ -1,12 +1,11 @@
 # Enthusiasts, 2015
 
-import logging
-from extract import *
-from transform import *
-from load import *
-import models
-from postgres import *
-from clusterize import *
+from cluster.clusterize import *
+from dwn.extract import *
+from dwn.load import *
+from dwn.transform import *
+
+from postgres import PostgresInjection
 
 # True - test mode, False - Work mode
 TEST = False

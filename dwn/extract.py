@@ -1,10 +1,11 @@
 # Enthusiasts, 2015
 
-import json
-import os
 import codecs
-from default_raw_paths import *
+import json
 import logging
+import os
+
+from dwn.default_raw_paths import *
 
 
 def __from(raw_directory):

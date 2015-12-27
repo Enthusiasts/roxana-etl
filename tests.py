@@ -1,10 +1,12 @@
 # Enthusiasts, 2015
 
-from transform import *
-from load import *
 from extract import *
-import models
+from load import *
+
+from dwn import models
+from dwn.transform import *
 from postgres import *
+
 
 # TODO: Тесты для отдела тестирования тоже сюда можно писать
 
