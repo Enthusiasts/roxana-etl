@@ -23,6 +23,10 @@ def main():
     checkins = transform_facts(postgres_injection, facts)
     load_facts(postgres_injection, [checkins])
 
+    costs = extract_costs()
+    costs = transform_costs(costs)
+    load_costs(postgres_injection, costs)
+
     cluster_checkins(postgres_injection)
 
 

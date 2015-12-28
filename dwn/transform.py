@@ -207,3 +207,11 @@ def transform_facts(postgres_injection, facts):
 
     table_wo_ununique = list(set(table))
     return table_wo_ununique
+
+
+def transform_costs(costs):
+    if costs["Costs"]:
+        cst = costs["Costs"][0]
+        return map((lambda x: (x["title"], x["lat"], x["lon"], x["cost"])), cst)
+    else:
+        return []

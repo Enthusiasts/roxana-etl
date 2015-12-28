@@ -67,3 +67,14 @@ def extract_facts():
     return {
         "Checkins": facts
     }
+
+
+def extract_costs():
+    logging.info("Extract of costs started")
+    costs = []
+    for path in DEF_PATHS_COSTS:
+        jsons = __from(path)
+        costs.extend(list(map(lambda x: x[1], jsons)))
+    return {
+        "Costs": costs
+    }

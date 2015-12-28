@@ -156,3 +156,25 @@ def load_facts(postgres_injection, facts):
 
     except Exception as e:
         logging.error("Exception in facts loading: " + e.args[0])
+
+
+def load_costs(postgres_injection, costs):
+    try:
+        with postgres_injection.connection() as connection, connection.cursor() as curs:
+            if costs:
+                loaded = 0
+                lastval_printed = 0
+                for cost in costs:
+                    title, lat, lon, cost = cost
+                    curs.execute("UPDATE entertainments SET cost = %s WHERE title = %s, latitude = %s, longtitude = %s",
+                                 (cost, title, lat, lon))
+                    loaded += 1
+                    if (loaded - lastval_printed) == 1000:
+                        print(str(loaded) + " / " + str(len(costs)) + " loaded.")
+                        lastval_printed = loaded
+                logging.info(str(loaded) + " costs from " + str(len(costs)) + " loaded.")
+
+        logging.info("Facts loaded.")
+
+    except Exception as e:
+        logging.error("Exception in facts loading: " + e.args[0])
