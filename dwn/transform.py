@@ -71,7 +71,7 @@ def transform_dimensions(dimens):
 
         for i in range(0, len(entertainments_datamosru)):
             title = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_TITLE]
-            #cost = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_COST]
+            #cost = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_COST] TODO : Remove this line if it don't needed more
             cost = 0
             zone_title = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_ZONE_TITLE]
             lon = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LONGITUDE]

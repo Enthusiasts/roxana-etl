@@ -17,10 +17,8 @@ ENTERTAINMENTS_TYPE = "TYPE"
 
 INSTA_URL = "photo_url"
 INSTA_USER_URL="page_url"
-#INSTA_TITLE = "title"
 INSTA_USERNAME = "user_name"
 INSTA_DATETIME = "time"
-#INSTA_GEO = "geo"
 INSTA_LONGTITUDE = "lon"
 INSTA_LATITUDE = "lat"
 
