@@ -52,12 +52,11 @@ def textprepairer(text): #func that prepare text from db to format we need
 # print(getvenueinfo(temp, loadauthdata()))
 
 
-# TODO: do all work here.
 def __get_cost(lon, lat, name, auth_data):
     lon1= "%10.3f"%lon
     lat1="%10.3f"%lat
-    ll=lon1+','+lat1
-    ll=ll.replace(' ', '')
+    ll = lon1 + ',' + lat1
+    ll = ll.replace(' ', '')
     return getvenueinfo(getplaceid(ll, name, auth_data), auth_data)
 
 
