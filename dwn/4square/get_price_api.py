@@ -27,17 +27,13 @@ def getplaceid(location, name, authdata):
     for dict in venues:
         n = dict.get('name').lower()
         if (temp[0] in n) or (temp[1] in n):
-            print(dict.get('id'))
-            if dict.get('price'):
-                return dict.get('price')
-            else:
-                return dict.get('id')
+            return dict.get('id')
 
 
 def getvenueinfo(placeid, authdata):
-    venueinforeq = requests.get('https://api.foursquare.com/v2/venues/'+placeid+'/', params=authdata)
-    info = venueinforeq.json()["response"]["venue"] #now do with it just what u want
     try:
+        venueinforeq = requests.get('https://api.foursquare.com/v2/venues/'+placeid+'/', params=authdata)
+        info = venueinforeq.json()["response"]["venue"] #now do with it just what u want
         return (info["price"]).get('tier')
     except:
         return randint(1,3)
@@ -52,14 +48,15 @@ def textprepairer(text): #func that prepare text from db to format we need
 
 
 # TODO: Remove
-temp = getplaceid('55.857319,37.432131', 'Corneli Pizza', loadauthdata())
-print(getvenueinfo(temp, loadauthdata()))
+# temp = getplaceid('55.857319,37.432131', 'Corneli Pizza', loadauthdata())
+# print(getvenueinfo(temp, loadauthdata()))
 
 
 # TODO: do all work here.
 def __get_cost(lon, lat, name, auth_data):
-    print("not supported yet")
-    return 0
+    # print("not supported yet")
+    ll=lon+','+lat
+    return getvenueinfo(getplaceid(ll, name, auth_data), auth_data)
 
 
 def get_cost_info(lon, lat, name):
