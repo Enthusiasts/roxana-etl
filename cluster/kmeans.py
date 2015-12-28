@@ -7,6 +7,7 @@ def cluster(data, num_k):
             lambda x: data[randint(0, len(data))],
             range(0, num_k)
     ))
+    means.sort()
 
     return __cluster(means, data)
 
