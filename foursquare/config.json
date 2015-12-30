@@ -1,0 +1,14 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "roxana",
+    "user": "roxana_consumer",
+    "password": "qwerty1234"
+  },
+  "fsquare": {
+    "limit": 5000,
+    "id": 0,
+    "output_json": "foursquare.json"
+  }
+}

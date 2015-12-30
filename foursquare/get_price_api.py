@@ -22,12 +22,18 @@ def getcategoryreq(authdata):
 def getplaceid(location, name, authdata):
     authdata['ll']=location
     findrequest = requests.get('https://api.foursquare.com/v2/venues/search', params=authdata)
-    venues = findrequest.json()["response"]["venues"]
-    temp = textprepairer(name)
-    for dict in venues:
-        n = dict.get('name').lower()
-        if (temp[0] in n) or (temp[1] in n):
-            return dict.get('id')
+    response = findrequest.json()
+    if response["meta"]["code"] == 200:
+        venues = response["response"]["venues"]
+        temp = textprepairer(name)
+        for dict in venues:
+            n = dict.get('name').lower()
+            if (temp[0] in n) or (temp[1] in n):
+                return dict.get('id')
+    else:
+        print("Error finding venues " + str(response["meta"]["code"]))
+        print(str(response["meta"]["errorType"]))
+        return -1
 
 
 def getvenueinfo(placeid, authdata):
@@ -40,12 +46,16 @@ def getvenueinfo(placeid, authdata):
 
 
 def textprepairer(text): #func that prepare text from db to format we need
-    if '«' in text:
-        temp = re.search(r'«(.*)»', text)
-        a = temp.group(1)
-        return [a.lower(), (slugify(a).lower()).replace('-', ' ')]
-    else:
-        return [text.lower(), ((slugify(text)).lower()).replace('-', ' ')]
+    try:
+        if '«' in text:
+            temp = re.search(r'«(.*)»', text)
+            a = temp.group(1)
+            return [a.lower(), (slugify(a).lower()).replace('-', ' ')]
+        else:
+            return [text.lower(), ((slugify(text)).lower()).replace('-', ' ')]
+    except AttributeError:
+        print("Can't handle " + text)
+        return ["undefined undefined", "undefined-undefined"]
 
 
 # TODO: Remove
@@ -67,6 +77,7 @@ def get_cost_info(lon, lat, name):
 
 
 def get_costs_info(data):  # data is list of (lon, lan name) tuples
+    #print(data)
     a_data = loadauthdata()
-    return map(lambda dat: __get_cost(dat[0], dat[1], dat[2], a_data), data)
+    return list(map(lambda dat: __get_cost(dat[0], dat[1], dat[2], a_data), data))
 

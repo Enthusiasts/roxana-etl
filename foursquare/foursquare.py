@@ -1,5 +1,5 @@
 import json
-import datetime
+from datetime import datetime, timedelta
 import psycopg2
 from get_price_api import *
 
@@ -7,8 +7,8 @@ import os, codecs
 
 import time, logging
 
-finish_date = datetime.datetime.now()
-start_date = finish_date + datetime.timedelta(days=-1)
+finish_date = datetime.now()
+start_date = finish_date + timedelta(days=-1)
 
 finish_date_tms = time.mktime(finish_date.timetuple())
 start_date_tms = time.mktime(start_date.timetuple())
@@ -31,7 +31,7 @@ def get_dict(data, cost):
 
 
 conf = json.load(codecs.open("config.json", "r", encoding="UTF-8"))
-id = conf["fsquare"]["authdata"]   # TODO : Authdata to config
+id = conf["fsquare"]["id"]   # TODO : Authdata to config
 limit = conf["fsquare"]["limit"]
 limit = 2500  # TODO : remove it after add data to config
 __db_config = conf["database"]
@@ -45,12 +45,12 @@ with psycopg2.connect(host=__db_config["host"],
     curs.execute("SELECT longtitude, latitude, title FROM entertainments WHERE cost=0 OFFSET %s LIMIT %s", (id * limit, limit))
     if curs.rowcount > 0:
         points = curs.fetchall()
-print len(points)
+print(len(points))
 points = set(points)
-print len(points)
+print(len(points))
 
 i = 0
-print("Start loading for " + str(len(points)) + " points... Time is " + datetime.datetime.now().isoformat())
+print("Start loading for " + str(len(points)) + " points... Time is " + datetime.now().isoformat())
 print("From " + str(id * limit))
 print("To " + str((id+1) * limit))
 '''for (lon, lat, title) in points:
@@ -72,4 +72,4 @@ output_file = codecs.open(output_json, "w", encoding = "UTF-8")
 output_file.write(json.dumps(dict_list))
 output_file.close()
 
-print("Finished. Time is " + datetime.datetime.now().isoformat())
+print("Finished. Time is " + datetime.now().isoformat())
