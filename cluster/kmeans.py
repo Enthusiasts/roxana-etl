@@ -7,7 +7,6 @@ def cluster(data, num_k):
             lambda x: data[randint(0, len(data))],
             range(0, num_k)
     ))
-    means.sort()
 
     return __cluster(means, data)
 
@@ -27,6 +26,8 @@ def __cluster(means_input, data):
                 smallest_error = error
                 closest_k = k[0]
         means[closest_k] = means[closest_k] * (1 - param) + x * (param)
+
+    means.sort()
 
     def find_index_means(x):
         return 1 + min(range(0, len(means)), key=lambda i: abs(means[i] - x))
