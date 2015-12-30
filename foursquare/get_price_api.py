@@ -48,11 +48,21 @@ def getvenueinfo(placeid, authdata):
 def textprepairer(text): #func that prepare text from db to format we need
     try:
         if '«' in text:
-            temp = re.search(r'«(.*)»', text)
-            a = temp.group(1)
-            return [a.lower(), (slugify(a).lower()).replace('-', ' ')]
+            temp = re.findall(r'«(.*)»', text)
+            a1 = temp[0].lower()
+            print(a1)
+            if slugify(a1) == None:
+                a2=a1
+            else:
+                a2=slugify(a1).replace('-', ' ')
+            return [a1, a2]
         else:
-            return [text.lower(), ((slugify(text)).lower()).replace('-', ' ')]
+            a1 = text.lower()
+            if slugify(a1) == None:
+                a2=a1
+            else:
+                a2=slugify(a1).replace('-', ' ')
+            return [a1, a2]
     except AttributeError:
         print("Can't handle " + text)
         return ["undefined undefined", "undefined-undefined"]
@@ -77,7 +87,5 @@ def get_cost_info(lon, lat, name):
 
 
 def get_costs_info(data):  # data is list of (lon, lan name) tuples
-    #print(data)
     a_data = loadauthdata()
-    return list(map(lambda dat: __get_cost(dat[0], dat[1], dat[2], a_data), data))
-
+    return map(lambda dat: __get_cost(dat[0], dat[1], dat[2], a_data), data)
