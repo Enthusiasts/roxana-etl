@@ -41,8 +41,9 @@ def getvenueinfo(placeid, authdata):
 
 def textprepairer(text): #func that prepare text from db to format we need
     if '«' in text:
-        temp = re.search(r'«(\w+(.\w)*)»', text)
-        return [(temp.group(1)).lower(), (slugify((temp.group(1)).lower()).replace('-', ' '))]
+        temp = re.search(r'«(.*)»', text)
+        a = temp.group(1)
+        return [a.lower(), (slugify(a).lower()).replace('-', ' ')]
     else:
         return [text.lower(), ((slugify(text)).lower()).replace('-', ' ')]
 
