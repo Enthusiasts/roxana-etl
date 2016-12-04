@@ -1,9 +1,6 @@
-# Enthusiasts, 2015
-
 '''
 Модели данных к которым приводит transform
 '''
-
 
 class CommonEqualityMixin(object):
 
@@ -41,7 +38,7 @@ class CheckIn(object):
     def __init__(self, url, datetime, longitude, latitude, username, username_url):
         self.url = url
         self.datetime = datetime  # Тип datetime!
-        self.longtitude = longitude
+        self.longitude = longitude
         self.latitude = latitude
         self.username = username
         self.username_url = username_url

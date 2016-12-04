@@ -1,12 +1,9 @@
-# Enthusiasts, 2015
-
 import codecs
 import json
 import logging
 import os
 
 from dwn.default_raw_paths import *
-
 
 def __from(raw_directory):
     filenames = os.listdir(raw_directory)

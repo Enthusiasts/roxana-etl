@@ -1,5 +1,3 @@
-# Enthusiasts, 2015
-
 from cluster.clusterize import *
 from dwn.extract import *
 from dwn.load import *
@@ -27,10 +25,10 @@ def main():
     costs = transform_costs(costs)
     load_costs(postgres_injection, costs)
 
-    cluster_checkins(postgres_injection)
+    #cluster_checkins(postgres_injection)
 
 
-logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(asctime)s %(message)s')
+logging.basicConfig(filename="roxana-etl" + ".log", level=logging.DEBUG, format='%(levelname)s %(asctime)s %(message)s')
 logging.info("======================")
 
 if TEST:

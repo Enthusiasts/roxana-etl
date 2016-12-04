@@ -1,5 +1,3 @@
-# Enthusiasts, 2015
-
 # json keys
 ZONE_TITLE = "ObjectShortName"
 
@@ -19,7 +17,7 @@ INSTA_URL = "photo_url"
 INSTA_USER_URL="page_url"
 INSTA_USERNAME = "user_name"
 INSTA_DATETIME = "time"
-INSTA_LONGTITUDE = "lon"
+INSTA_LONGITUDE = "lon"
 INSTA_LATITUDE = "lat"
 
 GEO_EPSILON = 0.0000000001

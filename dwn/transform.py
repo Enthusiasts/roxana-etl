@@ -1,11 +1,9 @@
-# Enthusiasts, 2015
-
+# coding=utf-8
 import logging
 import time
 
 from dwn.data_consts import *
 from dwn.models import *
-
 
 def transform_dimensions(dimens):
     # Разбираем по источникам, у каждого источника по сути своя трансформация.
@@ -42,7 +40,7 @@ def transform_dimensions(dimens):
             timestamp = time.time()  # canonical time
             zones.append(Zone(title, timestamp, None))
     except Exception as e:
-        logging.error("Exception in transforming zones data: ", e.args[0])
+        logging.exception("Exception in transforming zones data: %s", e.args[0])
 
     # TODO: not working yet
     # set polygons to zone
@@ -70,19 +68,19 @@ def transform_dimensions(dimens):
             return word.lower() == "да"
 
         for i in range(0, len(entertainments_datamosru)):
-            title = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_TITLE]
-            #cost = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_COST] TODO : Remove this line if it don't needed more
+            title = entertainments_datamosru[i][ENTERTAINMENTS_TITLE]
             cost = 0  # заполняем нулями. позже при получении этой информации обновим ее
-            zone_title = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_ZONE_TITLE]
-            lon = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LONGITUDE]
-            lat = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_LATITUDE]
-            seat = entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_SEAT_COUNT]
-            global_id = entertainments_datamosru[i]["Cells"]["global_id"]
-            social = __yn2boll(entertainments_datamosru[i]["Cells"][ENTERTAINMENTS_SOCIAL_PRIVELEGES])
+            zone_title = entertainments_datamosru[i][ENTERTAINMENTS_ZONE_TITLE]
+            lon = entertainments_datamosru[i][ENTERTAINMENTS_LONGITUDE]
+            lat = entertainments_datamosru[i][ENTERTAINMENTS_LATITUDE]
+            seat = entertainments_datamosru[i][ENTERTAINMENTS_SEAT_COUNT]
+            global_id = entertainments_datamosru[i]["global_id"]
+            social = __yn2boll(entertainments_datamosru[i][ENTERTAINMENTS_SOCIAL_PRIVELEGES])
             type = entertainments_datamosru[i][ENTERTAINMENTS_TYPE]
             entertainments.append(Entertainment(title, cost, zone_title, lon, lat, seat, social, type, global_id))
     except Exception as e:
-        logging.error("Exception in transforming entertainments data: ", e.args[0])
+        logging.info(entertainments_datamosru[i])
+        logging.exception("Exception in transforming entertainments data: %s", e.args[0])
 
     # set clients
     try:
@@ -91,7 +89,7 @@ def transform_dimensions(dimens):
             title = data[INSTA_USERNAME]
             clients.append(Client(title, url))
     except Exception as e:
-        logging.error("Exception in transforming clients data: ", e.args[0])
+        logging.exception("Exception in transforming clients data: %s", e.args[0])
 
     # set clients times
     try:
@@ -100,7 +98,7 @@ def transform_dimensions(dimens):
             datetime = dateutil.parser.parse(data[INSTA_DATETIME])
             times.append(Time(datetime))
     except Exception as e:
-        logging.error("Exception in transforming times data: ", e.args[0])
+        logging.exception("Exception in transforming times data: %s", e.args[0])
 
     logging.info("Dimensions transformed.")
 
@@ -128,7 +126,7 @@ def transform_facts(postgres_injection, facts):
             import dateutil.parser
             datetime = dateutil.parser.parse(data[INSTA_DATETIME])
             username_url=data[INSTA_USER_URL]
-            lon = data[INSTA_LONGTITUDE]
+            lon = data[INSTA_LONGITUDE]
             lat = data[INSTA_LATITUDE]
             table.append(CheckIn(url, datetime, lon, lat, username, username_url))
 
@@ -142,9 +140,9 @@ def transform_facts(postgres_injection, facts):
                     """
                     SELECT id
                     FROM entertainments
-                    WHERE abs(longtitude - %s) < %s and abs(latitude - %s) < %s
+                    WHERE abs(longitude - %s) < %s and abs(latitude - %s) < %s
                     """,
-                    (str(row.longtitude), str(GEO_EPSILON), str(row.latitude), str(GEO_EPSILON))
+                    (str(row.longitude), str(GEO_EPSILON), str(row.latitude), str(GEO_EPSILON))
                 )
                 if curs.rowcount > 0:
                     (ent_id,) = curs.fetchone()
@@ -152,7 +150,7 @@ def transform_facts(postgres_injection, facts):
                 else:
                     logging.info(
                         "Cannot find an entertainment for checkin: " +
-                        row.url + " (" + str(row.longtitude) + ", " + str(row.latitude) + ")"
+                        row.url + " (" + str(row.longitude) + ", " + str(row.latitude) + ")"
                     )
 
                 # Map client
@@ -170,7 +168,7 @@ def transform_facts(postgres_injection, facts):
                 else:
                     logging.info(
                         "Cannot find a client for checkin: " +
-                        row.url + " (" + str(row.longtitude) + ", " + str(row.latitude) + ")"
+                        row.url + " (" + str(row.longitude) + ", " + str(row.latitude) + ")"
                     )
 
                 # Map time
@@ -189,7 +187,7 @@ def transform_facts(postgres_injection, facts):
                 else:
                     logging.info(
                         "Cannot find a client for checkin: " +
-                        row.url + " (" + str(row.longtitude) + ", " + str(row.latitude) + ")"
+                        row.url + " (" + str(row.longitude) + ", " + str(row.latitude) + ")"
                     )
                 '''
                 transformed += 1

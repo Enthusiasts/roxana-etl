@@ -1,5 +1,3 @@
-raw/instagram/clients/*
-raw/data_mos_ru/entertainments/*
 *.log
 .idea/
 __pycache__/

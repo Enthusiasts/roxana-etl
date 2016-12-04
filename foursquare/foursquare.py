@@ -42,7 +42,7 @@ with psycopg2.connect(host=__db_config["host"],
                       database=__db_config["database"],
                       user=__db_config["user"],
                       password=__db_config["password"]) as connect, connect.cursor() as curs:
-    curs.execute("SELECT longtitude, latitude, title FROM entertainments WHERE cost=0 OFFSET %s LIMIT %s", (id * limit, limit))
+    curs.execute("SELECT longitude, latitude, title FROM entertainments WHERE cost=0 OFFSET %s LIMIT %s", (id * limit, limit))
     if curs.rowcount > 0:
         points = curs.fetchall()
 print(len(points))

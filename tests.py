@@ -1,5 +1,3 @@
-# Enthusiasts, 2015
-
 from extract import *
 from load import *
 
@@ -50,7 +48,7 @@ def test_transform_facts():
         INSTA_USERNAME: "username",
         INSTA_USER_URL: "http://instagram.com/username_url",
         INSTA_DATETIME: "2015-11-23 01:31:39 UTC",
-        INSTA_LONGTITUDE: "0.0",
+        INSTA_LONGITUDE: "0.0",
         INSTA_LATITUDE: "0.0"
     }, range(10)))
 
@@ -65,7 +63,7 @@ def test_transform_dimensions():
         INSTA_USERNAME: "username",
         INSTA_USER_URL: "http://instagram.com/username_url",
         INSTA_DATETIME: "2015-11-23 01:31:39 UTC",
-        INSTA_LONGTITUDE: "0.0",
+        INSTA_LONGITUDE: "0.0",
         INSTA_LATITUDE: "0.0"
     }, range(10)))
 
@@ -98,7 +96,7 @@ def test_integrated_woextract():
         INSTA_USERNAME: "username",
         INSTA_USER_URL: "http://instagram.com/username_url"+str(x),
         INSTA_DATETIME: "2015-11-23 01:31:3" + str(x) + " UTC",
-        INSTA_LONGTITUDE: "0.0",
+        INSTA_LONGITUDE: "0.0",
         INSTA_LATITUDE: "0.0"
     }, range(10)))
 

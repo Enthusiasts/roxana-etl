@@ -1,12 +1,9 @@
-# Enthusiasts, 2015
-
+# coding=utf-8
 import logging
 
 from dwn import data_consts
 
-
 # TODO: Закончить обработку
-
 
 def load_dimensions(postgres_injection, dimens):
     entertainments = dimens[0]
@@ -35,7 +32,7 @@ def load_dimensions(postgres_injection, dimens):
                         curs.execute("INSERT INTO entertainments VALUES (%s, %s,%s,%s,%s,%s,%s,%s, %s)", tuple)
                     else:
                         curs.execute("UPDATE entertainments "
-                                     "SET title = %s, cost = %s, zone_title = %s,longtitude = %s,"
+                                     "SET title = %s, cost = %s, zone_title = %s,longitude = %s,"
                                      "latitude = %s, seats_count = %s, social_priveleges = %s,"
                                      "type = %s WHERE id = %s", tuple[1:] + (tuple[0],))
 
@@ -116,13 +113,13 @@ def load_facts(postgres_injection, facts):
                     }[day_number]
 
                 '''checkins_tuples = list(map(
-                    lambda x: (x.client_id, x.entertainment_id, x.time_id, x.url, x.longtitude, x.latitude),
+                    lambda x: (x.client_id, x.entertainment_id, x.time_id, x.url, x.longitude, x.latitude),
                     checkins
                 ))'''
 
                 '''curs.executemany(
                     """
-                    INSERT INTO checkins (client_id, entertainment_id, time_id, url, longtitude, latitude)
+                    INSERT INTO checkins (client_id, entertainment_id, time_id, url, longitude, latitude)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     checkins_tuples
@@ -141,9 +138,9 @@ def load_facts(postgres_injection, facts):
                         (time_id,) = curs.fetchone()
                         curs.execute(
                         """
-                        INSERT INTO checkins (client_id, entertainment_id, time_id, url, longtitude, latitude)
+                        INSERT INTO checkins (client_id, entertainment_id, time_id, url, longitude, latitude)
                         VALUES (%s, %s, %s, %s, %s, %s)
-                        """, (checkin.client_id, checkin.entertainment_id, time_id, checkin.url, checkin.longtitude,
+                        """, (checkin.client_id, checkin.entertainment_id, time_id, checkin.url, checkin.longitude,
                               checkin.latitude))
                         connection.commit()
                         loaded += 1
@@ -166,7 +163,7 @@ def load_costs(postgres_injection, costs):
                 lastval_printed = 0
                 for cost in costs:
                     title, lat, lon, cost = cost
-                    curs.execute("UPDATE entertainments SET cost = %s WHERE title = %s, latitude = %s, longtitude = %s",
+                    curs.execute("UPDATE entertainments SET cost = %s WHERE title = %s, latitude = %s, longitude = %s",
                                  (cost, title, lat, lon))
                     loaded += 1
                     if (loaded - lastval_printed) == 1000:

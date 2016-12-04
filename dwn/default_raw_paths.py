@@ -1,5 +1,3 @@
-# Enthusiasts, 2015
-
 DEF_PATHS_FACTS = ["raw/instagram/clients"]
 DEF_PATHS_COSTS = ["raw/foursquare/costs"]
 DEF_PATHS_DIMENSIONS_ENTERTAINMENTS = ["raw/data_mos_ru/entertainments"]

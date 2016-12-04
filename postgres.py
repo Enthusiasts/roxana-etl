@@ -1,10 +1,7 @@
-# Enthusiasts, 2015
-
 import psycopg2
 
-
 class PostgresInjection(object):
-    __dbConfig = dict(dbhost="localhost", dbport=5432, dbname="roxana", dbuser="roxana_consumer", dbpassword="qwerty1234")
+    __dbConfig = dict(dbhost="localhost", dbport=5432, dbname="postgres", dbuser="postgres", dbpassword="")
 
     def connection(self):
         return psycopg2.connect(host=self.__dbConfig["dbhost"],
